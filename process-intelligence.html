@@ -985,7 +985,7 @@
   <div id="app">
     <div id="top">
       <div id="caption">
-        <div id="cap-eyebrow">Process Intelligence</div>
+        <div id="cap-eyebrow">Apromore Process Intelligence layers</div>
         <h1 id="cap-title">The layers of Process Intelligence.</h1>
         <p id="cap-sub"></p>
       </div>
@@ -1027,26 +1027,33 @@
   // ('mining', 'tasks', 'convo'); anything else gets a swappable placeholder.
   const LAYERS = [
     { num:'01', name:'Process Mining',  tag:'System',  color:'#8fb8ff', anim:'mining',
-      sub:'See how the process really runs &mdash; not how the diagram on the wall says it should.',
-      desc:'Reconstructs how a process actually runs inside a system from event logs &mdash; every variant, bottleneck and rework loop.' },
+      claim:'See how it actually runs.',
+      sub:'No workshops, no whiteboards. Your own event logs draw the process exactly as it happened.',
+      desc:'Reconstructs how a process actually runs inside a system from event logs: every variant, bottleneck and rework loop.' },
     { num:'02', name:'Task Mining',     tag:'Desktop', color:'#8fb8ff', anim:'tasks',
-      sub:'See the work <em>between</em> the systems &mdash; where process mining goes blind.',
-      desc:'Captures the work between systems at the desktop &mdash; the look-ups, emails and manual hand-offs that process mining alone cannot see.' },
+      claim:'See the work your systems can&rsquo;t.',
+      sub:'Process mining stops at the system boundary. Task mining sees the spreadsheets, emails and workarounds in between.',
+      desc:'Captures the work between systems at the desktop: the look-ups, emails and manual hand-offs that process mining alone cannot see.' },
     { num:'03', name:'Analysis',        tag:'Insight', color:'#8fb8ff', anim:'analysis',
-      sub:'Put a number on the waste &mdash; and on the prize.',
+      claim:'Size what it&rsquo;s costing you.',
+      sub:'Every delay, loop and workaround gets a price tag. You know what it costs, and what fixing it is worth.',
       desc:'Quantifies the cost of inefficiency and the value of recoverable waste, turning observation into a business case.' },
     { num:'04', name:'Recommendation',  tag:'AI',      color:'#8fb8ff', anim:'recommend',
-      sub:'From problem to the specific fix &mdash; proposed by AI.',
-      desc:'AI proposes the specific change to make &mdash; not just the problem, but the mechanism that fixes it.' },
+      claim:'Know exactly what to fix.',
+      sub:'AI studies your process and proposes the specific fix. You stay in charge of the decision.',
+      desc:'AI proposes the specific change to make: not just the problem, but the mechanism that fixes it.' },
     { num:'05', name:'Simulation',      tag:'Proof',   color:'#8fb8ff', anim:'simulate',
-      sub:'Prove the change works <em>before</em> you make it.',
+      claim:'Test the fix before you commit.',
+      sub:'Run the change in a digital copy of your process first. See the impact before anything touches the real thing.',
       desc:'Validates the recommendation before you commit, modelling the impact across cost, time and risk.' },
     { num:'06', name:'Monitor',         tag:'Live',    color:'#8fb8ff', anim:'monitor',
-      sub:'Keep it fixed &mdash; watch the process live and catch drift the moment it appears.',
+      claim:'Keep it fixed.',
+      sub:'Processes drift back to old habits. Monitoring watches live and flags it the moment it starts.',
       desc:'Watches the process in production, confirming the change held and catching drift the moment it appears.' },
   ];
   const FOUNDATION = { num:'07', name:'Conversational Interface', tag:'Underpins all', color:'#8fb8ff', anim:'convo',
-    sub:'Ask anything in plain English &mdash; the layer that underpins them all.',
+    claim:'Anyone can ask, anytime.',
+    sub:'No dashboards to learn, no analyst to wait for. Ask in plain English and get an answer backed by evidence.',
     desc:'The layer that underpins every other: ask any question in plain English and get an evidence-backed answer drawn from all six layers above.' };
 
   const STEPS = LAYERS.length + 1;            // 6 layers + conversational interface
@@ -2477,10 +2484,11 @@
     document.getElementById('app').classList.toggle('intro-mode', step === 0);
 
     // caption: set the title + sub text, then bounce eyebrow + title + sub together.
-    // Step 0 poses the bridging question; steps 1+ revert to the structural title.
+    // Step 0 poses the bridging question; steps 1+ carry the layer's claim
+    // ("Process Mining: See how it actually runs.") with the claim in accent blue.
     capTitle.innerHTML = step === 0
       ? 'How does <span class="hl">Apromore</span><br/>Process Intelligence <span class="hl">solve this?</span>'
-      : 'The layers of Process Intelligence.';
+      : ALL[step - 1].name + ': <span class="hl">' + ALL[step - 1].claim + '</span>';
     capSub.innerHTML = step === 0
       ? 'Six layers of process intelligence &mdash; underpinned by a conversational interface anyone can use.'
       : ALL[step - 1].sub;
