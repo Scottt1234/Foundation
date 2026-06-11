@@ -2541,7 +2541,7 @@
     capSub.innerHTML = step === 0
       ? ''
       : step === FINALE
-        ? 'See how you run. Size what\'s at stake. Fix it, test it, keep it fixed. And anyone can ask, anytime.'
+        ? 'See how you run. Size what\'s at stake. Fix it, test it, keep it fixed.'
         : ALL[step - 1].sub;
     const capEls = [capEyebrow, capTitle, capSub];
     capEls.forEach(el => el.classList.remove('cap-bounce'));
@@ -2602,7 +2602,7 @@
       // 2) stage the question and the (hidden) sub while the caption is
       //    invisible, so the layout the stack slides into never reflows
       capTitle.innerHTML = '<span class="fin-q">Do you actually know how your business runs?</span>';
-      capSub.innerHTML = 'See how you run. Size what\'s at stake. Fix it, test it, keep it fixed. And anyone can ask, anytime.';
+      capSub.innerHTML = 'See how you run. Size what\'s at stake. Fix it, test it, keep it fixed.';
       capSub.style.opacity = '0';                   // space reserved, revealed at the end
       capSub.classList.remove('cap-bounce');        // its filled animation would override the inline opacity
       const r1 = railWrap.getBoundingClientRect();
