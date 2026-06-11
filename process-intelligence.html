@@ -2554,6 +2554,9 @@
     navCount.textContent = step + ' / ' + FINALE;
     btnPrev.disabled = step === 0;
     btnNext.disabled = step === FINALE;
+
+    // Report the step to the deck — drives the autoplay dwell lookup.
+    if (embedded) toParent({ type: 'embed-step', step: step });
   }
 
   function goTo(n) {
@@ -2596,6 +2599,7 @@
     navCount.textContent = FINALE + ' / ' + FINALE;
     btnPrev.disabled = false;
     btnNext.disabled = true;
+    if (embedded) toParent({ type: 'embed-step', step: FINALE });
     // 1) the previous frame's caption fades out (big card is closing meanwhile)
     caption.classList.add('cap-hidden');
     FT(() => {
