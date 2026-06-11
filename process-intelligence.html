@@ -254,7 +254,7 @@
     /* the finale drops the eyebrow: the typed question carries the context */
     #app.finale-mode #cap-eyebrow { display: none; }
     /* the chapter question re-types in white at a smaller scale, then wipes;
-       'This is how.' answers at full chapter scale in blue */
+       'Now you can.' answers at full chapter scale in blue */
     #cap-title .fin-q { font-size: clamp(20px, 2.4vw, 32px); display: inline-block; color: #fff; transition: opacity 0.4s ease; }
     #cap-title .fin-q.fin-out { opacity: 0; }
     @media (prefers-reduced-motion: reduce) {
@@ -2621,7 +2621,7 @@
           const q = capTitle.querySelector('.fin-q'); if (q) q.classList.add('fin-out');
           // 5) the answer lands at full scale and the pulse travels the stack
           FT(() => {
-            capTitle.innerHTML = '<span class="hl">This is how.</span>';
+            capTitle.innerHTML = '<span class="hl">Now you can.</span>';
             capTitle.classList.remove('cap-bounce'); void capTitle.offsetWidth; capTitle.classList.add('cap-bounce');
             app.classList.add('finale-go');
             // 6) the recap line follows a beat later
