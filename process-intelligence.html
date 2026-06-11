@@ -1027,7 +1027,7 @@
   // ('mining', 'tasks', 'convo'); anything else gets a swappable placeholder.
   const LAYERS = [
     { num:'01', name:'Process Mining',  tag:'System',  color:'#8fb8ff', anim:'mining',
-      claim:'See how it actually runs.',
+      claim:'See how you actually run.',
       sub:'No workshops, no whiteboards. Your own event logs draw the process exactly as it happened.',
       desc:'Reconstructs how a process actually runs inside a system from event logs: every variant, bottleneck and rework loop.' },
     { num:'02', name:'Task Mining',     tag:'Desktop', color:'#8fb8ff', anim:'tasks',
@@ -2485,7 +2485,7 @@
 
     // caption: set the title + sub text, then bounce eyebrow + title + sub together.
     // Step 0 poses the bridging question; steps 1+ carry the layer's claim
-    // ("Process Mining: See how it actually runs.") with the claim in accent blue.
+    // ("Process Mining: See how you actually run.") with the claim in accent blue.
     capTitle.innerHTML = step === 0
       ? 'How does <span class="hl">Apromore</span><br/>Process Intelligence <span class="hl">solve this?</span>'
       : ALL[step - 1].name + ': <span class="hl">' + ALL[step - 1].claim + '</span>';
