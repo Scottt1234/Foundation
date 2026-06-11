@@ -168,13 +168,11 @@
       line-height: 1.34; letter-spacing: -0.015em; max-width: 920px;
     }
     .statement .hl { color: var(--sf-blue-m); }
-    /* gentle breathing pulse for a closing challenge line */
-    .hl-pulse { animation: hlPulse 2.6s ease-in-out infinite; }
+    /* gentle breathing pulse — used by the bridge slide's question line */
     @keyframes hlPulse {
       0%, 100% { opacity: 1; text-shadow: 0 0 18px rgba(143,184,255,0.45); }
       50%      { opacity: 0.62; text-shadow: 0 0 4px rgba(143,184,255,0.1); }
     }
-    @media (prefers-reduced-motion: reduce) { .hl-pulse { animation: none !important; } }
     .rule-accent { width: 44px; height: 3px; background: var(--sf-blue-m); border-radius: 2px; margin-bottom: 22px; }
 
     /* ── Slide 9 · Either way ────────────────────────────────────────── */

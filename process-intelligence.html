@@ -207,8 +207,6 @@
       0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 40%, transparent); }
       50%      { box-shadow: 0 0 0 12px transparent; }
     }
-    .pi-slot-label { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.62); }
-    .pi-slot-sub { font-size: 12px; color: rgba(255,255,255,0.42); font-style: italic; }
 
     /* ── Step 0 · chapter-break mode: the question alone, centered like a
        chapter page; rail and stage wait for the first advance ── */
@@ -223,10 +221,6 @@
     /* a breath before the chapter question lands — entry was too abrupt */
     #app.intro-mode .cap-bounce { animation-delay: 0.5s; }
     #app.intro-mode #rail-wrap, #app.intro-mode #pillar-wrap { display: none; }
-
-    /* ── Intro overlay (step 0) — retained as an empty hook; the chapter mode
-       above hides the stage entirely ── */
-    #intro { display: none; }
 
     /* ── Final frame · the whole stack, lit ── answers the step-0 question.
        The stage closes, caption + rail + pillar centre in the freed space,
@@ -1007,9 +1001,8 @@
       .pi-card:not(:last-child)::after { display: none; }
     }
     @media (max-width: 720px) {
-      #bottom, .pi-big, #intro { padding-left: 18px; padding-right: 18px; }
+      #bottom, .pi-big { padding-left: 18px; padding-right: 18px; }
       .pi-big { inset: 24px 18px 84px; }
-      #intro { inset: 24px 18px 84px; }
       #caption, #rail-wrap, #pillar-wrap { padding-left: 18px; padding-right: 18px; }
     }
   </style>
@@ -1035,7 +1028,6 @@
     </div>
 
     <div id="bottom">
-      <div id="intro" aria-hidden="true"></div>
       <!-- big cards injected here -->
     </div>
   </div>
@@ -1561,7 +1553,6 @@
   const dotsWrap = document.getElementById('dots');
   for (let i = 0; i < FINALE; i++) { const d = document.createElement('div'); d.className = 'dot'; dotsWrap.appendChild(d); }
   const dots = Array.from(dotsWrap.children);
-  const intro = document.getElementById('intro');
   const capEyebrow = document.getElementById('cap-eyebrow');
   const capTitle = document.getElementById('cap-title');
   const capSub = document.getElementById('cap-sub');
@@ -2311,11 +2302,11 @@
     const nar = scene.querySelector('.pi-narr');
     const T = (fn, ms) => { if (scene._t) scene._t.push(setTimeout(fn, ms)); };
     // Beat 1 — extract: "We extract the data your systems already capture."
-    cardType(scene, nar, [{ t: 'We ' }, { t: 'extract', hl: true }, { t: ' the data your systems already capture.' }], 46, 350);
+    cardType(scene, nar, [{ t: 'Process mining ' }, { t: 'extracts', hl: true }, { t: ' the data your systems already capture.' }], 46, 350);
     T(() => nar.classList.add('wipe'), 4300);
     // Beat 2 — connect: "We connect those records to understand exactly what's happening."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
-      cardType(scene, nar, [{ t: 'We ' }, { t: 'connect', hl: true }, { t: " those records to understand exactly what's happening." }], 46, 0); }, 4650);
+      cardType(scene, nar, [{ t: 'It ' }, { t: 'connects', hl: true }, { t: " those records to understand exactly what's happening." }], 46, 0); }, 4650);
     T(() => nar.classList.add('wipe'), 8400);
     // Beat 3 — real process: "Your real process appears, with every detour, bottleneck and loop exposed."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
@@ -2522,9 +2513,8 @@
     });
     pillar.classList.toggle('active', step === STEPS);
 
-    // big card / intro
+    // big card
     showBig(step);
-    intro.classList.toggle('show', step === 0);
     const app = document.getElementById('app');
     app.classList.toggle('intro-mode', step === 0);
     app.classList.toggle('finale-mode', step === FINALE);
@@ -2545,7 +2535,7 @@
         ? '<span class="hl">This is how.</span>'
         : ALL[step - 1].name + ': <span class="hl">' + ALL[step - 1].claim + '</span>';
     capSub.innerHTML = step === 0
-      ? 'Six layers of process intelligence, underpinned by a conversational interface anyone can use.'
+      ? ''
       : step === FINALE
         ? 'See how you run. Size what\'s at stake. Fix it, test it, keep it fixed. And anyone can ask, anytime.'
         : ALL[step - 1].sub;
@@ -2675,7 +2665,6 @@
       case 'deck-advance':     stepForward();  break;
       case 'deck-reverse':     stepBackward(); break;
       case 'replay':           replayCurrent(); break;     // deck replay button
-      case 'slide-activated':  step = 0; render(); break;  // legacy reset hook
     }
   });
 
