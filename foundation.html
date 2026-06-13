@@ -851,6 +851,7 @@
   <div class="section-label" id="section-label"></div>
   <div class="slide-dots" id="dots"></div>
   <div class="slide-controls">
+    <button class="slide-btn" id="mute-btn" title="Mute narration">&#128266;</button>
     <button class="slide-btn" id="autoplay-btn" title="Autoplay">&#9654;</button>
     <button class="slide-btn" id="replay-embed" title="Replay animation" style="display:none;">&#8635;</button>
     <button class="slide-btn" id="prev" title="Previous (←)">&#8592;</button>
@@ -1105,6 +1106,24 @@
       pendingAudioAdvance = null;
       setTimeout(() => { if (autoplayOn) fn(); }, 600);
     });
+
+    // ── Mute toggle ──────────────────────────────────────────────────
+    // Muting only silences the element: a muted clip still plays through and
+    // fires 'ended', so autoplay's beat timing is unchanged. Preference persists.
+    const muteBtn = document.getElementById('mute-btn');
+    let muted = localStorage.getItem('deckMuted') === '1';
+    function applyMute() {
+      narration.muted = muted;
+      muteBtn.classList.toggle('on', muted);
+      muteBtn.innerHTML = muted ? '&#128263;' : '&#128266;';
+      muteBtn.title = muted ? 'Unmute narration' : 'Mute narration';
+    }
+    muteBtn.addEventListener('click', () => {
+      muted = !muted;
+      localStorage.setItem('deckMuted', muted ? '1' : '0');
+      applyMute();
+    });
+    applyMute();
 
     // The clip for the current beat, or null if none is on file.
     // Frame index: Process Reality uses its act (1–3 → F01–F03, matching the
