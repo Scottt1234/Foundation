@@ -977,7 +977,6 @@
   <div class="section-label" id="section-label"></div>
   <div class="slide-dots" id="dots"></div>
   <div class="slide-controls">
-    <button class="slide-btn" id="setup-btn" title="How to watch (Esc)">&#9881;</button>
     <button class="slide-btn" id="mute-btn" title="Mute narration">&#128266;</button>
     <button class="slide-btn" id="autoplay-btn" title="Autoplay">&#9654;</button>
     <button class="slide-btn" id="replay-embed" title="Replay animation" style="display:none;">&#8635;</button>
@@ -1461,7 +1460,6 @@
     setupEl.querySelectorAll('.setup-card').forEach(card =>
       card.addEventListener('click', () =>
         startDeck(card.dataset.auto === '1', card.dataset.audio === '1', card.dataset.loop === '1')));
-    document.getElementById('setup-btn').addEventListener('click', showSetup);
 
     go(0);
   </script>
