@@ -1,28 +1,30 @@
-// Cloudflare Pages Function — POST /log
-//
-// Appends each authenticated view to a Google Sheet (permanent record beyond
-// Cloudflare's ~7-day Access log retention). The email comes from the trusted
-// Cf-Access-Authenticated-User-Email header that Access injects; a posted body
-// {email} is used as a fallback. The Sheet web-app URL is the SHEET_URL env var
-// (Pages project → Settings → Variables and Secrets), kept out of the repo/client.
+// Cloudflare Pages Function — /log  (DIAGNOSTIC: reports state + always attempts a write)
 export async function onRequest(context) {
   const { request, env } = context;
 
-  let email = request.headers.get('Cf-Access-Authenticated-User-Email');
-  if (!email) {
-    try { const body = await request.json(); email = body && body.email; } catch (e) {}
-  }
+  const hdrEmail = request.headers.get('Cf-Access-Authenticated-User-Email') || '';
+  let bodyEmail = '';
+  try { const b = await request.json(); bodyEmail = (b && b.email) || ''; } catch (e) {}
+  const email = hdrEmail || bodyEmail || '(no email)';
 
-  if (email && env.SHEET_URL) {
-    const payload = JSON.stringify({ email, time: new Date().toISOString() });
-    context.waitUntil(
-      fetch(env.SHEET_URL, {
+  let posted = false, postStatus = 0, postErr = '';
+  if (env.SHEET_URL) {
+    try {
+      const r = await fetch(env.SHEET_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: payload,
-      }).catch(() => {})
-    );
+        body: JSON.stringify({ email, time: new Date().toISOString() }),
+        redirect: 'follow',
+      });
+      posted = true;
+      postStatus = r.status;
+    } catch (e) {
+      postErr = String(e);
+    }
   }
 
-  return new Response(null, { status: 204 });
+  return new Response(
+    JSON.stringify({ sheetUrlSet: !!env.SHEET_URL, hdrEmail: hdrEmail || null, bodyEmail: bodyEmail || null, posted, postStatus, postErr }),
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
+  );
 }
