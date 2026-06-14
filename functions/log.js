@@ -1,4 +1,4 @@
-// Cloudflare Pages Function — /log  (DIAGNOSTIC: GET w/ query params + reports state)
+// Cloudflare Pages Function — /log  (DIAGNOSTIC v3: capture response body + version marker)
 export async function onRequest(context) {
   const { request, env } = context;
 
@@ -7,7 +7,7 @@ export async function onRequest(context) {
   try { const b = await request.json(); bodyEmail = (b && b.email) || ''; } catch (e) {}
   const email = hdrEmail || bodyEmail || '(no email)';
 
-  let posted = false, postStatus = 0, postErr = '';
+  let posted = false, postStatus = 0, postErr = '', respSnippet = '', finalUrl = '';
   if (env.SHEET_URL) {
     try {
       const url = new URL(env.SHEET_URL);
@@ -16,13 +16,22 @@ export async function onRequest(context) {
       const r = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
       posted = true;
       postStatus = r.status;
+      finalUrl = r.url || '';
+      const txt = await r.text();
+      respSnippet = txt.slice(0, 300);
     } catch (e) {
       postErr = String(e);
     }
   }
 
   return new Response(
-    JSON.stringify({ sheetUrlSet: !!env.SHEET_URL, hdrEmail: hdrEmail || null, bodyEmail: bodyEmail || null, posted, postStatus, postErr }),
+    JSON.stringify({
+      v: 'diag-g2',
+      sheetUrlSet: !!env.SHEET_URL,
+      hdrEmail: hdrEmail || null,
+      bodyEmail: bodyEmail || null,
+      posted, postStatus, postErr, finalUrl, respSnippet,
+    }),
     { status: 200, headers: { 'Content-Type': 'application/json' } }
   );
 }
