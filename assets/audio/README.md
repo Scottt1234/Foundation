@@ -1,5 +1,12 @@
 # Slide audio
 
+This is the **base** narration set and the universal fallback. The setup screen
+also offers a **Narration accent** picker (US / UK / AU); those load from
+`assets/audio-us`, `assets/audio-uk` and `assets/audio-au` respectively. Any
+clip missing from a chosen accent folder falls back to **this** folder, so the
+deck never goes silent while an accent set is still being recorded. Use the
+same filenames in every folder.
+
 Drop narration MP3s here. Filenames follow the convention **`SxxFyy.mp3`**:
 
 - **`Sxx`** — slide number, matching the deck (`S01` = Slide 1 … `S10` = Slide 10)
