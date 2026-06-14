@@ -1020,7 +1020,7 @@
       opts = opts || {};
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
-      clearTimeout(introTimer);
+      clearTimeout(introTimer); introTimer = null;
       disarmThreadReveal();
       slides[current].classList.remove('active');
       document.querySelectorAll('.dot')[current].classList.remove('active');
@@ -1192,7 +1192,7 @@
     function advance() {
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
-      clearTimeout(introTimer);
+      clearTimeout(introTimer); introTimer = null;
       disarmThreadReveal();
       if (isProcessReality(current) && prAct < PR_ACTS) {
         prAct++;
@@ -1228,7 +1228,7 @@
     function reverse() {
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
-      clearTimeout(introTimer);
+      clearTimeout(introTimer); introTimer = null;
       disarmThreadReveal();
       if (isProcessReality(current) && prAct > 1) {
         prAct--;
@@ -1327,9 +1327,10 @@
     let pendingIntroMs = 0;
     // Per-slide silent lead-in (ms) before the slide's first clip, keyed by section.
     const LEAD_IN = {
-      'The Common Thread': 1500,   // slide 3
-      'The Question': 1500,        // slide 4
-      'Why Now': 1000,             // slide 7
+      'The Common Thread': 1500,     // slide 3
+      'The Question': 1500,          // slide 4
+      'Process Intelligence': 1000,  // slide 6 · frame 00
+      'Why Now': 1000,               // slide 7
     };
     let loopOn = false;   // option 1 only: restart the deck after a pause at the end
     let piStep = 0;    // the layers embed's internal step, reported via 'embed-step'
@@ -1348,10 +1349,13 @@
     let autoToken = 0;
     let pendingAudioAdvance = null;
     function beatChanged() {
-      clearTimeout(introTimer);
+      // If a lead-in is already counting down for this beat, let it fire — don't
+      // restart or bypass it. (The layers embed re-reports its step on entry, which
+      // would otherwise re-enter here and play the audio immediately.)
+      if (introTimer) return;
       const lead = pendingIntroMs; pendingIntroMs = 0;   // only the entry beat carries a lead-in
       if (lead > 0) {
-        introTimer = setTimeout(() => { playBeatAudio(); if (autoplayOn) scheduleAuto(); }, lead);
+        introTimer = setTimeout(() => { introTimer = null; playBeatAudio(); if (autoplayOn) scheduleAuto(); }, lead);
       } else {
         playBeatAudio();
         if (autoplayOn) scheduleAuto();
@@ -1446,7 +1450,8 @@
         pendingAudioAdvance = null;
         // Per-beat hold before moving on: slide 3 close (reduced), slide 6 frame 07, else ~0.6s.
         const breath = (isThread(current) && tBeat === T_BEATS) ? 1500   // slide 3 close
-                     : (isLayers(current) && piStep === 7)       ? 4000   // slide 6 · frame 07
+                     : (isLayers(current) && piStep === 3)       ? 2000   // slide 6 · frame 03
+                     : (isLayers(current) && piStep === 7)       ? 8000   // slide 6 · frame 07
                      : 600;
         setTimeout(() => { if (autoplayOn) fn(); }, breath);
         return;
@@ -1526,7 +1531,7 @@
       setAutoplay(false);
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
-      clearTimeout(introTimer);
+      clearTimeout(introTimer); introTimer = null;
       disarmThreadReveal();
       narration.pause();
       setupEl.style.display = 'flex';

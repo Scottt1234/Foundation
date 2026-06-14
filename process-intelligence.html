@@ -2281,19 +2281,19 @@
     const T = (fn, ms) => { if (scene._t) scene._t.push(setTimeout(fn, ms)); };
     // Beat 1 — "Process Mining only sees what is logged within your systems."
     cardType(scene, nar, [{ t: 'Process mining can only see what your systems ' }, { t: 'log', hl: true }, { t: '.' }], 46, 350);
-    T(() => nar.classList.add('wipe'), 4600);
+    T(() => nar.classList.add('wipe'), 5600);          // +1s read time on beat 1
     // Beat 2 — "But the real work happens between them, where nothing is logged."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
-      cardType(scene, nar, [{ t: 'But so much of the real work happens ' }, { t: 'between them', hl: true }, { t: ', where nothing gets logged.' }], 46, 0); }, 4950);
-    T(() => nar.classList.add('wipe'), 9400);
+      cardType(scene, nar, [{ t: 'But so much of the real work happens ' }, { t: 'between them', hl: true }, { t: ', where nothing gets logged.' }], 46, 0); }, 5950);
+    T(() => nar.classList.add('wipe'), 11400);         // +1s read time on beat 2
     // Beat 3 — "Task mining captures what process mining misses."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
-      cardType(scene, nar, [{ t: 'Task mining captures what process mining ' }, { t: 'misses', hl: true }, { t: '.' }], 46, 0); }, 9750);
+      cardType(scene, nar, [{ t: 'Task mining captures what process mining ' }, { t: 'misses', hl: true }, { t: '.' }], 46, 0); }, 11750);
     // Beat 3 closer — a 1.3s breath after the streams settle, then typed AS the
     // new variants draw onto the map (13.5–14.4s): one beat, at human speed.
     T(() => {
       cardType(scene, nar, [{ t: ' Showing you what\'s ' }, { t: 'really', hl: true }, { t: ' going on.' }], 46, 0, true);
-    }, 13500);
+    }, 15500);
   }
   function stopTM(el) {
     const scene = el.querySelector('.tm-scene'); if (!scene) return;
@@ -2317,14 +2317,14 @@
     const T = (fn, ms) => { if (scene._t) scene._t.push(setTimeout(fn, ms)); };
     // Beat 1 — extract: "We extract the data your systems already capture."
     cardType(scene, nar, [{ t: 'Process mining ' }, { t: 'extracts', hl: true }, { t: ' the data your systems already capture.' }], 46, 350);
-    T(() => nar.classList.add('wipe'), 4300);
+    T(() => nar.classList.add('wipe'), 5300);          // +1s read time on beat 1
     // Beat 2 — connect: "We connect those records to understand exactly what's happening."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
-      cardType(scene, nar, [{ t: 'It ' }, { t: 'connects', hl: true }, { t: " those records to map exactly what's happening." }], 46, 0); }, 4650);
-    T(() => nar.classList.add('wipe'), 8400);
+      cardType(scene, nar, [{ t: 'It ' }, { t: 'connects', hl: true }, { t: " those records to map exactly what's happening." }], 46, 0); }, 5650);
+    T(() => nar.classList.add('wipe'), 10400);         // +1s read time on beat 2
     // Beat 3 — real process: "Your real process appears, with every detour, bottleneck and loop exposed."
     T(() => { nar.classList.remove('wipe'); nar.innerHTML = '';
-      cardType(scene, nar, [{ t: 'Your ' }, { t: 'real process', hl: true }, { t: ' appears, with every detour, bottleneck and loop exposed.' }], 46, 0); }, 8750);
+      cardType(scene, nar, [{ t: 'Your ' }, { t: 'real process', hl: true }, { t: ' appears, with every detour, bottleneck and loop exposed.' }], 46, 0); }, 10750);
   }
 
   // Crowd → question pulse: a small token travels from a random person to a new question bubble.
