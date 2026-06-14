@@ -1,24 +1,21 @@
-// Cloudflare Pages Function — POST /log
+// Cloudflare Pages Function — /log  (DIAGNOSTIC MODE)
 //
-// Records each authenticated view to a Google Sheet for a permanent record that
-// outlives Cloudflare's ~7-day Access log retention.
-//
-// The visitor's email is taken from the trusted Cf-Access-Authenticated-User-Email
-// header when Access injects it; otherwise it falls back to the email the page read
-// from Cloudflare's /cdn-cgi/access/get-identity endpoint and sent in the body.
-// The Sheet's web-app URL lives in the SHEET_URL environment variable (Pages project
-// → Settings → Variables and Secrets), so it's never exposed in the repo or client.
-//
-// Dormant until SHEET_URL is set.
+// Temporarily logs EVERY hit so we can see whether the function is invoked and
+// whether it receives an email. Revert to email-required once confirmed working.
 export async function onRequest(context) {
   const { request, env } = context;
 
-  let email = request.headers.get('Cf-Access-Authenticated-User-Email');
-  if (!email) {
-    try { const body = await request.json(); email = body && body.email; } catch (e) {}
-  }
+  const hdrEmail = request.headers.get('Cf-Access-Authenticated-User-Email') || '';
+  let bodyEmail = '';
+  try {
+    const body = await request.json();
+    bodyEmail = (body && body.email) || '';
+  } catch (e) {}
 
-  if (email && env.SHEET_URL) {
+  const email = hdrEmail || bodyEmail
+    || ('(no email — hdr=' + (hdrEmail ? 'y' : 'n') + ' body=' + (bodyEmail ? 'y' : 'n') + ')');
+
+  if (env.SHEET_URL) {
     const payload = JSON.stringify({ email, time: new Date().toISOString() });
     context.waitUntil(
       fetch(env.SHEET_URL, {
