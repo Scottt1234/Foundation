@@ -1012,6 +1012,7 @@
       opts = opts || {};
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
+      clearTimeout(introTimer);
       disarmThreadReveal();
       slides[current].classList.remove('active');
       document.querySelectorAll('.dot')[current].classList.remove('active');
@@ -1036,6 +1037,8 @@
       // Why Now (slide 7): same pattern as the Pressures.
       wBeat = (isWhyNow(current) && opts.reverse) ? W_BEATS : 1;
       if (isWhyNow(current)) applyWhyNowBeat();
+      // Give slide 7 a 1s silent breath before its opening line (forward entry only).
+      pendingIntroMs = (isWhyNow(current) && !opts.reverse) ? WHYNOW_INTRO_MS : 0;
       // Thread (slide 3): forward = first beat (diagram held); reverse = fully revealed.
       if (isThread(current)) {
         tBeat = opts.reverse ? T_BEATS : 1;
@@ -1162,6 +1165,7 @@
     function advance() {
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
+      clearTimeout(introTimer);
       disarmThreadReveal();
       if (isProcessReality(current) && prAct < PR_ACTS) {
         prAct++;
@@ -1193,6 +1197,7 @@
     function reverse() {
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
+      clearTimeout(introTimer);
       disarmThreadReveal();
       if (isProcessReality(current) && prAct > 1) {
         prAct--;
@@ -1283,6 +1288,9 @@
     let autoplayOn = false;
     let autoTimer = null;
     let beatTimer = null;   // manual mode: auto-sequences in-slide beats (stops at slide edge)
+    let introTimer = null;  // optional silent lead-in before a slide's first clip
+    let pendingIntroMs = 0;
+    const WHYNOW_INTRO_MS = 1000;   // breathe before slide 7's opening line
     let loopOn = false;   // option 1 only: restart the deck after a pause at the end
     let piStep = 0;    // the layers embed's internal step, reported via 'embed-step'
     const autoBtn = document.getElementById('autoplay-btn');
@@ -1299,7 +1307,16 @@
     // called by the narration 'ended' handler (defined in the audio block).
     let autoToken = 0;
     let pendingAudioAdvance = null;
-    function beatChanged() { playBeatAudio(); if (autoplayOn) scheduleAuto(); }
+    function beatChanged() {
+      clearTimeout(introTimer);
+      const lead = pendingIntroMs; pendingIntroMs = 0;   // only the entry beat carries a lead-in
+      if (lead > 0) {
+        introTimer = setTimeout(() => { playBeatAudio(); if (autoplayOn) scheduleAuto(); }, lead);
+      } else {
+        playBeatAudio();
+        if (autoplayOn) scheduleAuto();
+      }
+    }
     function scheduleAuto() {
       clearTimeout(autoTimer);
       pendingAudioAdvance = null;
@@ -1464,6 +1481,7 @@
       setAutoplay(false);
       clearTimeout(beatTimer);
       clearTimeout(threadTimer);
+      clearTimeout(introTimer);
       disarmThreadReveal();
       narration.pause();
       setupEl.style.display = 'flex';
